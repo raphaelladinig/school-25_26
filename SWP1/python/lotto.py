@@ -26,10 +26,15 @@ def run_statistics(num_draws=1000, total_numbers=45, numbers_to_draw=6):
     return stats_dict
 
 
-statistics = run_statistics()
+def main():
+    statistics = run_statistics()
 
-print("Number | Count")
-print("------ | ------")
+    print("Number | Count")
+    print("------ | ------")
 
-for number, count in sorted(statistics.items()):
-    print(f"{number: <6} | {count}")
+    for number, count in sorted(statistics.items()):
+        print(f"{number: <6} | {count}")
+
+
+if __name__ == main:
+    main()
