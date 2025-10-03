@@ -73,7 +73,9 @@ for i in range(num_images_to_export):
     category_dir = os.path.join(base_export_dir, f"{label_index}_{label_name}")
     im.save(os.path.join(category_dir, f"image_{i}.jpeg"))
 
-print(f"{num_images_to_export} Bilder wurden in das Verzeichnis '{base_export_dir}' exportiert.")
+print(
+    f"{num_images_to_export} Bilder wurden in das Verzeichnis '{base_export_dir}' exportiert."
+)
 
 
 x_train_norm = x_train.astype("float32") / 255
@@ -103,10 +105,17 @@ model = keras.Sequential(
 model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
 
+history = model.fit(
+    x_train_flat, y_train_cat, batch_size=256, epochs=10, validation_split=0.1
+)
+
+
 # 3.1
 score = model.evaluate(x_test_flat, y_test_cat)
 print(f"Test loss: {score[0]:.4f}")
-print(f"Test accuracy: {score[1]:.4f} (d.h. {score[1]*100:.2f}% der Testbilder korrekt klassifiziert)")
+print(
+    f"Test accuracy: {score[1]:.4f} (d.h. {score[1]*100:.2f}% der Testbilder korrekt klassifiziert)"
+)
 
 
 # 3.2
