@@ -9,7 +9,7 @@ public class DbManager : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        string connectionString = "Server=localhost;Database=restful_service_5b_g2;User=root;Password=root;";
+        string connectionString = "Server=localhost;Database=swp;User=root;Password=root;";
         optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
     }
 

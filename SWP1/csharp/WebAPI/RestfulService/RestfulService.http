@@ -1,6 +1,0 @@
-@RestfulService_HostAddress = http://localhost:5138
-
-GET {{RestfulService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
