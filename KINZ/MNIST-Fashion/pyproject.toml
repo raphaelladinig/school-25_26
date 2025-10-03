@@ -11,3 +11,7 @@ dependencies = [
     "pillow>=11.3.0",
     "tensorflow>=2.20.0",
 ]
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
