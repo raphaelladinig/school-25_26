@@ -35,7 +35,6 @@
           NIX_LD_LIBRARY_PATH = with pkgs;
             lib.makeLibraryPath [
               opencv
-              glib
               libGL
               libz
               stdenv.cc.cc
