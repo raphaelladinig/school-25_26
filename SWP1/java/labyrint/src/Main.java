@@ -1,47 +1,50 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Main {
+    static class Patient {
+        private final String name;
+        private final int priority;
+        private final long arrivalOrder;
 
-    public static void main(String[] args) {
-        // 1. HashMap erstellen und 10 Schüler mit Note speichern (Schlüssel: Name, Wert: Note)
-        HashMap<String, Double> schuelerNoten = new HashMap<>();
-
-        // Beispiel-Daten (10 Schüler)
-        schuelerNoten.put("Anna", 1.5);
-        schuelerNoten.put("Bernd", 3.0);
-        schuelerNoten.put("Clara", 2.0);
-        schuelerNoten.put("David", 4.5);
-        schuelerNoten.put("Emil", 1.0);
-        schuelerNoten.put("Franziska", 2.5);
-        schuelerNoten.put("Gustav", 5.0);
-        schuelerNoten.put("Hanna", 1.0);
-        schuelerNoten.put("Ines", 3.5);
-        schuelerNoten.put("Jonas", 2.0);
-
-        // 2. Alle Schüler mit Note < 3.0 ausgeben
-        System.out.println("--- Schüler mit Note < 3.0 ---");
-        for (Map.Entry<String, Double> eintrag : schuelerNoten.entrySet()) {
-            if (eintrag.getValue() < 3.0) {
-                System.out.println(eintrag.getKey() + ": " + eintrag.getValue());
+        public Patient(String name, int priority, long arrivalOrder) {
+            if (priority < 1 || priority > 5) {
+                throw new IllegalArgumentException("Priorität muss zwischen 1 und 5 liegen.");
             }
+            this.name = name;
+            this.priority = priority;
+            this.arrivalOrder = arrivalOrder;
         }
 
-        // 3. Durchschnittsnote berechnen
-        double summeNoten = 0.0;
-        for (double note : schuelerNoten.values()) {
-            summeNoten += note;
+        public String getName() { return name; }
+        public int getPriority() { return priority; }
+        public long getArrivalOrder() { return arrivalOrder; }
+
+        @Override
+        public String toString() {
+            return name + " (Prio " + priority + ", #" + arrivalOrder + ")";
         }
+    }
+    public static void main(String[] args) {
+        Comparator<Patient> patientOrder = Comparator
+                .comparingInt(Patient::getPriority)
+                .thenComparingLong(Patient::getArrivalOrder);
 
-        double anzahlSchueler = schuelerNoten.size();
-        double durchschnitt = 0.0;
+        PriorityQueue<Patient> triageQueue = new PriorityQueue<>(patientOrder);
 
-        if (anzahlSchueler > 0) {
-            durchschnitt = summeNoten / anzahlSchueler;
+        long seq = 0;
+
+        triageQueue.offer(new Patient("Anna",   3, seq++));
+        triageQueue.offer(new Patient("Boris",  1, seq++));
+        triageQueue.offer(new Patient("Cem",    5, seq++));
+        triageQueue.offer(new Patient("Daria",  2, seq++));
+        triageQueue.offer(new Patient("Elif",   1, seq++));
+        triageQueue.offer(new Patient("Felix",  2, seq++));
+        triageQueue.offer(new Patient("Gina",   3, seq++));
+
+        System.out.println("Behandlungsreihenfolge:");
+        while (!triageQueue.isEmpty()) {
+            Patient next = triageQueue.poll();
+            System.out.println("  -> " + next);
         }
-
-        // 4. Durchschnitt ausgeben
-        System.out.println("\n--- Durchschnittsnote ---");
-        System.out.printf("Die Durchschnittsnote beträgt: %.2f%n", durchschnitt);
     }
 }
