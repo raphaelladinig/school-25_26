@@ -2,7 +2,7 @@ default:
     @just --list
 
 upload:
-	pio run -t upload
+    pio run -t upload
 
 test:
     pio test
