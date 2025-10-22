@@ -11,7 +11,7 @@ DallasTemperature sensors(&oneWire);
 
 unsigned long previousMillis = 0;
 const long interval = 1000;
-const double targetTemp = 1;
+const double targetTemp = 3;
 const double hysterese = 0.2;
 int power = 0;
 float startTemp = 0;
