@@ -31,16 +31,13 @@
             pkgsi686Linux.glibc
           ];
 
-          # NIX_LD_LIBRARY_PATH = with pkgs;
-          #   lib.makeLibraryPath [
-          #     glibc_multi
-          #   ];
-          #
-          # NIX_LD = builtins.readFile "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
-          #
-          # shellHook = ''
-          #   export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
-          # '';
+          NIX_LD_LIBRARY_PATH = with pkgs;
+            lib.makeLibraryPath [
+            ];
+
+          shellHook = ''
+            export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
+          '';
         };
       }
     );
