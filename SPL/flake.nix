@@ -28,16 +28,8 @@
       pkgs: {
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            pkgsi686Linux.glibc
+            glibc_multi
           ];
-
-          NIX_LD_LIBRARY_PATH = with pkgs;
-            lib.makeLibraryPath [
-            ];
-
-          shellHook = ''
-            export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
-          '';
         };
       }
     );
