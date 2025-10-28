@@ -29,7 +29,21 @@
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
             glibc_multi
+            uv
+            python3
           ];
+
+          NIX_LD_LIBRARY_PATH = with pkgs;
+            lib.makeLibraryPath [
+              stdenv.cc.cc
+              libz
+            ];
+
+          NIX_LD = builtins.readFile "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+
+          shellHook = ''
+            export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
+          '';
         };
       }
     );
