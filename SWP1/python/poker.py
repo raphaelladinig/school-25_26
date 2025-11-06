@@ -154,6 +154,6 @@ def compare_with_reality(sim_results, num_games):
 
 
 if __name__ == "__main__":
-    games = 100000
-    ergebnisse = run_simulation(games)
-    compare_with_reality(ergebnisse, games)
+    num_games = 100000
+    results = run_simulation(num_games)
+    compare_with_reality(results, num_games)
