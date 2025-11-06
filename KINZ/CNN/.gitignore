@@ -1,0 +1,6 @@
+.direnv
+.venv
+__pycache__
+rps/
+rps-test-set/
+out/

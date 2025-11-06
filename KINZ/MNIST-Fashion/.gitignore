@@ -1,0 +1,7 @@
+.direnv
+.venv
+__pycache__
+out
+fashion_mnist_kategorien/
+output_model/
+output_visualisierung/
