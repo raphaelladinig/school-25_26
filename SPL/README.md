@@ -5,7 +5,6 @@ To resolve the following error (only exists on nixos I think)
 add this to `.clangd`
 
 ```
-
 CompileFlags:
   Add:
     - -isystem/home/raphael/.platformio/packages/toolchain-atmelavr/avr/include
