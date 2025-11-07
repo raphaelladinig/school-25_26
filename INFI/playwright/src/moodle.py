@@ -35,7 +35,7 @@ def scrape_moodle_courses(username: str, password: str, moodle_url: str):
         df = pd.DataFrame(termine)
         print(df.head())
 
-        df.to_csv("moodle_kurse.csv", index=False, encoding="utf-8-sig")
+        df.to_csv("./out/moodle_termine.csv", index=False, encoding="utf-8-sig")
 
 
 
