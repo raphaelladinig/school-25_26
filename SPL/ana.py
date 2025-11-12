@@ -2,11 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import make_interp_spline
 
-def plot_data_from_file(filename="./logs/zweipunktregelung.log"):
+
+def plot_data_from_file(
+    filename="./logs/zweipunktregelung.log", filename2="./logs/ana.txt"
+):
     x_data = []
     y_data = []
     power_data = []
-    start_temp = "N/A"
 
     try:
         with open(filename, "r") as file:
@@ -16,7 +18,7 @@ def plot_data_from_file(filename="./logs/zweipunktregelung.log"):
                 print(f"Error: The file '{filename}' is empty.")
                 return
 
-            start_temp = lines[0].strip()
+            lines[0].strip()
             data_lines = lines[1:]
 
             for line in data_lines:
@@ -62,7 +64,7 @@ def plot_data_from_file(filename="./logs/zweipunktregelung.log"):
     else:
         y_smooth = spl(x_smooth)
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True, gridspec_kw={'height_ratios': [3, 1]})
+    _, ax1 = plt.subplots(figsize=(12, 4))
 
     ax1.plot(
         x_smooth,
@@ -71,13 +73,15 @@ def plot_data_from_file(filename="./logs/zweipunktregelung.log"):
         linestyle="-",
         linewidth=2,
         color="forestgreen",
-        label="Temperature Difference",
+        label="Messdaten",
     )
 
-    ax1.axhline(3.0, color='red', linestyle='--', linewidth=1.5, label='$T_z$')
-    ax1.axhline(3.2, color='darkorange', linestyle=':', linewidth=1, label='Hysteresis Bounds')
-    ax1.axhline(2.8, color='darkorange', linestyle=':', linewidth=1)
-    
+    ax1.axhline(3.0, color="red", linestyle="--", linewidth=1.5, label="$T_z$")
+    ax1.axhline(
+        3.2, color="darkorange", linestyle=":", linewidth=1, label="Hysteresen Grenzen"
+    )
+    ax1.axhline(2.8, color="darkorange", linestyle=":", linewidth=1)
+
     ax1.set_xlim(left=0)
     ax1.set_ylim(bottom=0)
 
@@ -85,28 +89,47 @@ def plot_data_from_file(filename="./logs/zweipunktregelung.log"):
 
     ax1.grid(True, linestyle="--", alpha=0.6)
 
+    x2_data = []
+    y2_data = []
+    if filename2:
+        try:
+            with open(filename2, "r") as file:
+                lines = file.readlines()
+                if not lines:
+                    print(f"Error: The file '{filename2}' is empty.")
+                else:
+                    lines[0].strip()
+                    data_lines = lines[1:]
+                    for line in data_lines:
+                        parts = line.strip().split()
+                        if len(parts) >= 2:
+                            try:
+                                x2_data.append(float(parts[0]) / 60)
+                                y2_data.append(float(parts[1]))
+                            except ValueError:
+                                print(
+                                    f"Warning: Skipping line due to non-numeric data: {line.strip()}"
+                                )
+                                continue
+                        else:
+                            print(
+                                f"Warning: Skipping line due to insufficient columns (expected 2): {line.strip()}"
+                            )
+                            continue
+        except FileNotFoundError:
+            print(
+                f"Error: The file '{filename2}' was not found. Please ensure it exists."
+            )
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+    ax1.plot(x2_data, y2_data, marker="", linestyle="-", color="blue", label="Simulationsdaten")
     ax1.legend()
-
-    ax2.step(
-        x_data,
-        power_data,
-        where='post',
-        color='navy',
-        label="Power Level"
-    )
-
-    ax2.set_xlabel("Time (min)")
-    ax2.set_ylabel("Power Level")
-    ax2.set_yticks([0, 50])
-    ax2.set_ylim(-5, 55)
-
-    ax2.grid(True, linestyle="--", alpha=0.6)
 
     plt.tight_layout()
 
-    plt.savefig("./assets/zweipunktregelung-messung.png")
+    plt.savefig("./assets/ana.png")
 
 
 if __name__ == "__main__":
     plot_data_from_file()
-
