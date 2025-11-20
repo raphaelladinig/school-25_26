@@ -2,10 +2,25 @@ import random
 from collections import Counter
 from functools import total_ordering
 
+
 @total_ordering
 class Card:
     SUITS = ["Herz", "Karo", "Kreuz", "Pik"]
-    RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Bube", "Dame", "König", "Ass"]
+    RANKS = [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "Bube",
+        "Dame",
+        "König",
+        "Ass",
+    ]
     VALUES = {rank: i + 2 for i, rank in enumerate(RANKS)}
 
     def __init__(self, suit, rank):
@@ -30,6 +45,7 @@ class Card:
     def __lt__(self, other):
         return self.value < other.value
 
+
 class Deck:
     def __init__(self):
         self.cards = [Card(suit, rank) for suit in Card.SUITS for rank in Card.RANKS]
@@ -46,6 +62,7 @@ class Deck:
             return self.cards.pop()
 
         return [self.cards.pop() for _ in range(num_cards)]
+
 
 class HandEvaluator:
     def __init__(self, cards):
@@ -70,8 +87,8 @@ class HandEvaluator:
         if self.values == [14, 5, 4, 3, 2]:
             return True
 
-        is_consecutive = (self.values[0] - self.values[4] == 4)
-        has_no_pairs = (len(self.rank_counts) == 5)
+        is_consecutive = self.values[0] - self.values[4] == 4
+        has_no_pairs = len(self.rank_counts) == 5
 
         return is_consecutive and has_no_pairs
 
@@ -96,13 +113,10 @@ class HandEvaluator:
         if self.counts == [3, 1, 1]:
             return "Drilling"
 
-        if self.counts == [2, 2, 1]:
-            return "Zwei Paare"
+        return ("Zwei Paare", "Ein Paar", "Höchste Karte")[
+           0 if self.counts == [2, 2, 1] else 1 if self.counts == [2, 1, 1, 1] else 2
+        ]
 
-        if self.counts == [2, 1, 1, 1]:
-            return "Ein Paar"
-
-        return "Höchste Karte"
 
 def run_simulation(num_games):
     hand_counts = {
@@ -115,7 +129,7 @@ def run_simulation(num_games):
         "Drilling": 0,
         "Zwei Paare": 0,
         "Ein Paar": 0,
-        "Höchste Karte": 0
+        "Höchste Karte": 0,
     }
 
     for _ in range(num_games):
@@ -130,18 +144,19 @@ def run_simulation(num_games):
 
     return hand_counts
 
+
 def compare_with_reality(sim_results, num_games):
     real_probabilities = {
-        "Royal Flush": (4 / 2598960) * 100,         # 0.000154%
-        "Straight Flush": (36 / 2598960) * 100,       # 0.00139%
-        "Poker (Vierling)": (624 / 2598960) * 100,      # 0.0240%
-        "Full House": (3744 / 2598960) * 100,     # 0.1441%
-        "Flush": (5108 / 2598960) * 100,        # 0.1965%
-        "Strasse": (10200 / 2598960) * 100,     # 0.3925%
-        "Drilling": (54912 / 2598960) * 100,    # 2.1128%
-        "Zwei Paare": (123552 / 2598960) * 100,   # 4.7539%
+        "Royal Flush": (4 / 2598960) * 100,  # 0.000154%
+        "Straight Flush": (36 / 2598960) * 100,  # 0.00139%
+        "Poker (Vierling)": (624 / 2598960) * 100,  # 0.0240%
+        "Full House": (3744 / 2598960) * 100,  # 0.1441%
+        "Flush": (5108 / 2598960) * 100,  # 0.1965%
+        "Strasse": (10200 / 2598960) * 100,  # 0.3925%
+        "Drilling": (54912 / 2598960) * 100,  # 2.1128%
+        "Zwei Paare": (123552 / 2598960) * 100,  # 4.7539%
         "Ein Paar": (1098240 / 2598960) * 100,  # 42.2569%
-        "Höchste Karte": (1302540 / 2598960) * 100 # 50.1177%
+        "Höchste Karte": (1302540 / 2598960) * 100,  # 50.1177%
     }
 
     print(f"{'Kombination':<20} | {'Simulation (%)':<15} | {'Echt (%)':<15}")
