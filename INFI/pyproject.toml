@@ -1,5 +1,5 @@
 [project]
-name = "wintertourismus"
+name = "infi"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -9,9 +9,5 @@ dependencies = [
     "openpyxl>=3.1.5",
     "pandas>=2.3.3",
     "seaborn>=0.13.2",
-]
-
-[dependency-groups]
-dev = [
-    "types-seaborn>=0.13.2.20250914",
+    "statsmodels>=0.14.5",
 ]
