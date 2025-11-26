@@ -26,25 +26,36 @@
 
     devShells = forAllSystems (
       pkgs: {
-        default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            glibc_multi
-            uv
-            python3
-          ];
-
-          NIX_LD_LIBRARY_PATH = with pkgs;
-            lib.makeLibraryPath [
-              stdenv.cc.cc
-              libz
+        default = let
+          python = pkgs.python313.withPackages (ps:
+            with ps; [
+              tkinter
+            ]);
+        in
+          pkgs.mkShell {
+            buildInputs = with pkgs; [
+              glibc_multi
+              uv
+              python
+              tk
+              tcl
             ];
 
-          NIX_LD = builtins.readFile "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+            NIX_LD_LIBRARY_PATH = with pkgs;
+              lib.makeLibraryPath [
+                stdenv.cc.cc
+                libz
+              ];
 
-          shellHook = ''
-            export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
-          '';
-        };
+            NIX_LD = builtins.readFile "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+
+            shellHook = ''
+              export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH"
+              export PYTHONPATH="${python}/lib/python3.13/site-packages:$PYTHONPATH"
+              export TCL_LIBRARY="${pkgs.tcl}/lib/tcl${pkgs.tcl.version}"
+              export TK_LIBRARY="${pkgs.tk}/lib/tk${pkgs.tk.version}"
+            '';
+          };
       }
     );
   };
