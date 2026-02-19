@@ -1,6 +1,18 @@
+import functools
+import time
 import random
 from collections import Counter
 from functools import total_ordering
+
+def measure_time(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        print(f"\nExecution time of '{func.__name__}': {end_time - start_time:.4f} seconds")
+        return result
+    return wrapper
 
 
 @total_ordering
@@ -117,7 +129,7 @@ class HandEvaluator:
            0 if self.counts == [2, 2, 1] else 1 if self.counts == [2, 1, 1, 1] else 2
         ]
 
-
+@measure_time
 def run_simulation(num_games):
     hand_counts = {
         "Royal Flush": 0,
